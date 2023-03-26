@@ -47,6 +47,7 @@ class _ManualPageState extends State<ManualPage> {
       ),
     );
 
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     setState(() {

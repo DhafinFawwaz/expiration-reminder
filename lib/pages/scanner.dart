@@ -32,7 +32,7 @@ class _ScannerPageState extends State<ScannerPage> {
   }
   void onScanned(String scannedCode)
   {
-    if(!isCodeValid(scannedCode) && !isScanning){
+    if(!isCodeValid(scannedCode) || isScanning){
       setState(() {
         result = null;
       });
@@ -67,13 +67,13 @@ class _ScannerPageState extends State<ScannerPage> {
         },
       ),
     );
-
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     delayCamera();
   }
   void delayCamera() async {
-    await Future.delayed(const Duration(seconds: 3), (){
+    await Future.delayed(const Duration(seconds: 1), (){
       setState(() {
         scanBorderColor = Colors.red;
         isScanning = false;
