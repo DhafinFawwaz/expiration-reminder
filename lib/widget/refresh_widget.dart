@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-class RefreshWidget extends StatefulWidget {
-  const RefreshWidget({super.key, required this.onRefresh, required this.child});
+class PullRefresh extends StatefulWidget {
+  const PullRefresh({super.key, required this.onRefresh, required this.child});
 
   final Widget child;
   final Future Function() onRefresh;
 
   @override
-  State<RefreshWidget> createState() => _RefreshWidgetState();
+  State<PullRefresh> createState() => _PullRefreshState();
 }
 
-class _RefreshWidgetState extends State<RefreshWidget> {
+class _PullRefreshState extends State<PullRefresh> {
   @override
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: widget.onRefresh,
-    child: widget.child
+    child: Stack(
+      children: [widget.child, ListView()],
+    )
   );
 }

@@ -1,29 +1,46 @@
+import 'package:expiration_reminder/backend/reminder_helper.dart';
 import 'package:flutter/material.dart';
 import '../model/reminder_model.dart';
 import 'package:date_field/date_field.dart';
-
+import '../util/global_theme.dart';
 import '../widget/back_widget.dart';
+import 'package:expiration_reminder/backend/sql_helper.dart';
 
 class ManualPage extends StatefulWidget {
-  const ManualPage({super.key});
+  const ManualPage({super.key, required this.refreshPages});
+  final Function refreshPages;
 
   @override
   State<ManualPage> createState() => _ManualPageState();
 }
 
 class _ManualPageState extends State<ManualPage> {
+  // Backend access
+  Future<void> addReminder(Reminder reminder) async {
+    await SQLHelper.createReminder(reminder);
+    widget.refreshPages();
+  }
+  //
 
   final productNameController = TextEditingController();
   DateTime? selectedExpirationDate;
   DateTime? selectedNotificationDate;
 
+  void onConfirm() {
+    Reminder reminder = Reminder(
+      id: 0,
+      productName: productNameController.text,
+      expirationDate: selectedExpirationDate!,
+      notificationTime: selectedNotificationDate!,
+      description: ""
+    );
+    addReminder(reminder);
 
-  void onConfirm(String scannedCode)
-  {
     final snackBar = SnackBar(
       content: Text('Added ${productNameController.text}'),
       action: SnackBarAction(
-        label: 'Undo',
+        label: 'Close',
+        textColor: GlobalTheme.slate50,
         onPressed: () {
           // Some code to undo the change.
         },
@@ -34,110 +51,97 @@ class _ManualPageState extends State<ManualPage> {
 
     setState(() {
       productNameController.text = "";
-      selectedExpirationDate = null;
-      selectedNotificationDate = null;
+      // selectedExpirationDate = null;
+      // selectedNotificationDate = null;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: Stack(
-        children: [
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(children: [
+      appBar: AppBar(
+        title: Text(""),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+      ),
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
                       TextField(
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          filled: true,
+                          fillColor: GlobalTheme.slate50,
                           labelText: 'Product Name',
+                          suffixIcon: const Icon(Icons.menu_book)
                         ),
-                        controller: productNameController,
                         
+                        controller: productNameController,
                       ),
-
                       const SizedBox(height: 20),
-
                       DateTimeFormField(
-                        decoration: const InputDecoration(
-                          hintStyle: TextStyle(color: Colors.black45),
-                          errorStyle: TextStyle(color: Colors.redAccent),
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.event_note),
-                          labelText: 'Expiration Date',
-                        ),
+                        decoration: GlobalTheme.dateDecoration,
                         mode: DateTimeFieldPickerMode.date,
                         autovalidateMode: AutovalidateMode.always,
-                        validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+                        validator: (e) => (e?.day ?? 0) == 1
+                            ? 'Please not the first day'
+                            : null,
                         onDateSelected: (DateTime value) {
-                          print(value);
+                          selectedExpirationDate = value;
                         },
-                        initialValue: DateTime.now(),
                         
                       ),
-            
                       const SizedBox(height: 20),
-            
                       DateTimeFormField(
-                        decoration: const InputDecoration(
-                          hintStyle: TextStyle(color: Colors.black45),
-                          errorStyle: TextStyle(color: Colors.redAccent),
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.event_note),
-                          labelText: 'Notification Time',
-                        ),
+                        decoration: GlobalTheme.timeDecoration,
                         mode: DateTimeFieldPickerMode.time,
                         autovalidateMode: AutovalidateMode.always,
-                        validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+                        validator: (e) => (e?.day ?? 0) == 1
+                            ? 'Please not the first day'
+                            : null,
                         onDateSelected: (DateTime value) {
-                          print(value);
+                          selectedNotificationDate = value;
                         },
-                        initialValue: DateTime.now(),
                       ),
-            
                       const SizedBox(height: 15),
-
-            
                       Align(
                         alignment: Alignment.bottomRight,
                         child: ElevatedButton(
-                          onPressed: () {onConfirm("Bread;5-19-2022");},
-                          child: Text("Add",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w900
+                            onPressed: onConfirm,
+                            child: Text(
+                              "Add",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900),
                             ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            shadowColor: Colors.transparent,
-                            elevation: 0.0,
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                          ).copyWith(elevation:ButtonStyleButton.allOrNull(0.0))
-                        ),
+                            style: ElevatedButton.styleFrom(
+                              shape: GlobalTheme.shape,
+                              shadowColor: Colors.transparent,
+                              elevation: 0.0,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                            ).copyWith(
+                                elevation:
+                                    ButtonStyleButton.allOrNull(0.0))),
                       ),
-            
-                    ],)
-                  ),
-                ],
-              ),
-            ),
+                    ],
+                  )),
+            ],
           ),
-    
-          Positioned(
-            top: 15.0,
-            left: 15.0, // or whatever
-            child: FloatingBackButton(Colors.black),
-          ),
-        ],
-
+        ),
       ),
-      
-      
     );
   }
 }

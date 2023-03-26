@@ -8,8 +8,9 @@ class FloatingBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: "0",
       onPressed: (){
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       },
       child: const Icon(Icons.arrow_back_ios_new),
       elevation: 0,
