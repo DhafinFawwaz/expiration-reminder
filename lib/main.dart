@@ -1,11 +1,13 @@
-import 'package:expiration_reminder/pages/manual.dart';
-import 'package:expiration_reminder/pages/scanner.dart';
+import 'package:expiration_reminder/backend/sql_helper.dart';
+
 import '../util/global_theme.dart';
 import 'package:flutter/material.dart';
 import './pages/home.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+
 void main() {
+  SQLHelper.initializeNotification();
   initializeDateFormatting().then((_) =>
     runApp(const MyApp())
   );

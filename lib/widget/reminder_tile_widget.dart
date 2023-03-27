@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:zoom_tap_animation/zoom_tap_animation.dart';
-import '../backend/reminder_helper.dart';
 import '../backend/sql_helper.dart';
 import '../model/reminder_model.dart';
 import '../pages/reminder.dart';
 import '../util/global_theme.dart';
 
-void onRemove(int id) async {
-  
-}
-  
 Widget getSubtitle(Reminder reminder)
   {
     final dayDifference = daysBetween(DateTime.now(), reminder.expirationDate);
@@ -48,56 +42,51 @@ Widget getSubtitle(Reminder reminder)
   =>
       Container(
         margin: const EdgeInsets.all(7),
-        child: Stack(
-          alignment: AlignmentDirectional.centerEnd,
-          children: [
-            ZoomTapAnimation(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => ReminderPage(reminder: reminder,),
-                  ),
-                ).then((value) => refreshPages());
+        child: ScaleTile(
+          onTap:() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => ReminderPage(reminder: reminder,),
+              ),
+            ).then((value) => refreshPages());
+          },
+          head: Container(
+            decoration: const BoxDecoration(
+              color: GlobalTheme.slate50,
+              borderRadius: BorderRadius.all(Radius.circular(20))
+            ),
+            padding: const EdgeInsets.all(15),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  reminder.productName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: GlobalTheme.slate700
+                  )
+                ),
+                const SizedBox(height: 3),
+                getSubtitle(reminder),
+              ],
+            ),
+          ),
+          trailing: Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: FloatingActionButton( // Delete button
+              heroTag: null,
+              onPressed: () async {
+                await SQLHelper.deleteReminder(reminder.id);
+                refreshPages();
               },
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: GlobalTheme.slate50,
-                  borderRadius: BorderRadius.all(Radius.circular(20))
-                ),
-                padding: const EdgeInsets.all(15),
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      reminder.productName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: GlobalTheme.slate700
-                      )
-                    ),
-                    const SizedBox(height: 3),
-                    getSubtitle(reminder),
-                  ],
-                ),
-              ),
+              elevation: 0,
+              highlightElevation: 0,
+              backgroundColor: Colors.transparent,
+              child: const Icon(Icons.delete, color: GlobalTheme.slate800)
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: FloatingActionButton( // Delete button
-                heroTag: null,
-                onPressed: () async {
-                  await SQLHelper.deleteReminder(reminder.id);
-                  refreshPages();
-                },
-                elevation: 0,
-                highlightElevation: 0,
-                backgroundColor: Colors.transparent,
-                child: const Icon(Icons.delete, color: GlobalTheme.slate800)
-              ),
-            ),
-          ],
+          ),
         ),
       );
       
@@ -134,3 +123,56 @@ Widget getSubtitle(Reminder reminder)
       //     ),
       //   ),
       // )
+
+
+class ScaleTile extends StatefulWidget {
+  const ScaleTile({
+    super.key, 
+    required this.head, 
+    required this.trailing,
+    required this.onTap
+  });
+  final Widget head;
+  final Widget trailing;
+  final Function onTap;
+
+  @override
+  State<ScaleTile> createState() => _ScaleTileState();
+}
+
+class _ScaleTileState extends State<ScaleTile> {
+  double currentScale = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: currentScale,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOutQuart,
+      child: Stack(
+        alignment: AlignmentDirectional.centerEnd,
+        children: [
+          GestureDetector(
+            onTap: () {
+              widget.onTap();
+            },
+            child: Listener(
+              onPointerDown: (event) {
+                setState(() {
+                  currentScale = 0.95;
+                });
+              },
+              onPointerUp: (event) {
+                setState(() {
+                  currentScale = 1;
+                });
+              },
+              child: widget.head,
+            ),
+          ),
+          widget.trailing
+        ],
+      ),
+    );
+  }
+}

@@ -67,7 +67,7 @@ class CalendarViewPageState extends State<CalendarViewPage> {
           ),
           firstDay: DateTime.utc(2010, 10, 16),
           lastDay: DateTime.utc(2030, 3, 14),
-          focusedDay: DateTime.now(),
+          focusedDay: _focusedDay,
           selectedDayPredicate: (day) {
             return isSameDay(_selectedDay, day);
           },
@@ -81,7 +81,6 @@ class CalendarViewPageState extends State<CalendarViewPage> {
           eventLoader: (day) {
             return _getEventsForDay(day);
           },
-
         ),
         const SizedBox(height: 8.0),
         Expanded(
@@ -92,8 +91,6 @@ class CalendarViewPageState extends State<CalendarViewPage> {
             ).toList()
           ),
         ),
-
-        // ListViewPage(key: _listViewPageState, refreshPages: widget.refreshPages)
       
       ],
     );
