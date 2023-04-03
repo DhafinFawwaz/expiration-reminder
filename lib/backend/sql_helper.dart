@@ -1,8 +1,11 @@
+import 'package:expiration_reminder/backend/notification_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import '../model/reminder_model.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class SQLHelper{
   static Future<void> createTables(sql.Database database) async {
@@ -35,6 +38,7 @@ class SQLHelper{
       conflictAlgorithm: sql.ConflictAlgorithm.replace
     );
     print("Reminder created");
+    NotificationHelper.scheduleNotification(reminder);
     return id;
   }
 
@@ -48,6 +52,7 @@ class SQLHelper{
 
     final data = reminder.toJson();
     final result = await db.update('reminders', data, where: "id = ?", whereArgs: [id]);
+    NotificationHelper.scheduleNotification(reminder);
     return result;
   }
 
@@ -55,40 +60,15 @@ class SQLHelper{
     final db = await SQLHelper.db();
     try {
       await db.delete("reminders", where: "id = ?", whereArgs: [id]);
+      NotificationHelper.deleteNotification(id);
     } catch (err) {
       debugPrint("Error when deleting an item: $err");
     }
   }
 
-  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  static AndroidFlutterLocalNotificationsPlugin androidFlutterLocalNotificationsPlugin = AndroidFlutterLocalNotificationsPlugin();
-  
-  static Future<void> initializeNotification() async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
 
-    final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
-    
+  static String getDescription() {
+
+    return "";
   }
-
-  static void displayNotification() async {
-    const AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails('your channel id', 'your channel name',
-        channelDescription: 'your channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'plain title', 'plain body', notificationDetails,
-        payload: 'item x');
-  }
-
-
-  
-
 }

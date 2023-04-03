@@ -14,7 +14,7 @@ class ReminderPage extends StatefulWidget {
 
 class _ReminderPageState extends State<ReminderPage> {
   DateTime? selectedExpirationDate;
-  DateTime? selectedNotificationDate;
+  DateTime? selectedNotificationTime;
 
   
 
@@ -22,7 +22,7 @@ class _ReminderPageState extends State<ReminderPage> {
   void initState() {
     super.initState();
     selectedExpirationDate = widget.reminder.expirationDate;
-    selectedNotificationDate = widget.reminder.notificationTime;
+    selectedNotificationTime = widget.reminder.notificationTime;
   }
 
 
@@ -31,7 +31,7 @@ class _ReminderPageState extends State<ReminderPage> {
       id: widget.reminder.id,
       productName: widget.reminder.productName,
       expirationDate: selectedExpirationDate!,
-      notificationTime: selectedNotificationDate!,
+      notificationTime: selectedNotificationTime!,
       description: widget.reminder.description
     );
     SQLHelper.updateReminder(widget.reminder.id, reminder);
@@ -93,7 +93,6 @@ class _ReminderPageState extends State<ReminderPage> {
                     decoration: GlobalTheme.dateDecoration,
                     mode: DateTimeFieldPickerMode.date,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
                     onDateSelected: (DateTime value) {
                       selectedExpirationDate = value;
                     },
@@ -107,9 +106,8 @@ class _ReminderPageState extends State<ReminderPage> {
                     decoration: GlobalTheme.timeDecoration,
                     mode: DateTimeFieldPickerMode.time,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
                     onDateSelected: (DateTime value) {
-                      selectedNotificationDate = value;
+                      selectedNotificationTime = value;
                     },
                     initialValue: widget.reminder.notificationTime,
                   ),
@@ -135,7 +133,17 @@ class _ReminderPageState extends State<ReminderPage> {
                       ).copyWith(elevation:ButtonStyleButton.allOrNull(0.0))
                     ),
                   ),
-        
+
+
+                  const SizedBox(height: 15),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      SQLHelper.getDescription(),
+                      textAlign: TextAlign.justify,
+                    ),
+                  ),
+
 
 
                 ],)

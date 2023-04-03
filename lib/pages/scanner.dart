@@ -1,3 +1,4 @@
+import 'package:expiration_reminder/widget/reminder_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
@@ -57,15 +58,11 @@ class _ScannerPageState extends State<ScannerPage> {
     );
     addReminder(reminder);
 
-    final snackBar = SnackBar(
-      content: Text('Added ${productName}'),
-      action: SnackBarAction(
-        textColor: GlobalTheme.slate50,
-        label: 'Close',
-        onPressed: () {
-          // Some code to undo the change.
-        },
-      ),
+    final snackBar = getSnackbar(
+      reminder,
+      () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
     );
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

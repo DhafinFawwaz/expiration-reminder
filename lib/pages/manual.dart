@@ -6,6 +6,8 @@ import '../util/global_theme.dart';
 import '../widget/back_widget.dart';
 import 'package:expiration_reminder/backend/sql_helper.dart';
 
+import '../widget/reminder_snackbar_widget.dart';
+
 class ManualPage extends StatefulWidget {
   const ManualPage({super.key, required this.refreshPages});
   final Function refreshPages;
@@ -24,27 +26,23 @@ class _ManualPageState extends State<ManualPage> {
 
   final productNameController = TextEditingController();
   DateTime? selectedExpirationDate;
-  DateTime? selectedNotificationDate;
+  DateTime? selectedNotificationTime;
 
   void onConfirm() {
     Reminder reminder = Reminder(
       id: 0,
       productName: productNameController.text,
       expirationDate: selectedExpirationDate!,
-      notificationTime: selectedNotificationDate!,
+      notificationTime: selectedNotificationTime!,
       description: ""
     );
     addReminder(reminder);
 
-    final snackBar = SnackBar(
-      content: Text('Added ${productNameController.text}'),
-      action: SnackBarAction(
-        label: 'Close',
-        textColor: GlobalTheme.slate50,
-        onPressed: () {
-          // Some code to undo the change.
-        },
-      ),
+    final snackBar = getSnackbar(
+      reminder,
+      () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
     );
 
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -96,9 +94,6 @@ class _ManualPageState extends State<ManualPage> {
                         decoration: GlobalTheme.dateDecoration,
                         mode: DateTimeFieldPickerMode.date,
                         autovalidateMode: AutovalidateMode.always,
-                        validator: (e) => (e?.day ?? 0) == 1
-                            ? 'Please not the first day'
-                            : null,
                         onDateSelected: (DateTime value) {
                           selectedExpirationDate = value;
                         },
@@ -109,11 +104,8 @@ class _ManualPageState extends State<ManualPage> {
                         decoration: GlobalTheme.timeDecoration,
                         mode: DateTimeFieldPickerMode.time,
                         autovalidateMode: AutovalidateMode.always,
-                        validator: (e) => (e?.day ?? 0) == 1
-                            ? 'Please not the first day'
-                            : null,
                         onDateSelected: (DateTime value) {
-                          selectedNotificationDate = value;
+                          selectedNotificationTime = value;
                         },
                       ),
                       const SizedBox(height: 15),

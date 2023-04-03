@@ -1,16 +1,11 @@
-import 'package:expiration_reminder/backend/sql_helper.dart';
-
 import '../util/global_theme.dart';
 import 'package:flutter/material.dart';
 import './pages/home.dart';
-import 'package:intl/date_symbol_data_local.dart';
-
+import 'backend/notification_helper.dart';
 
 void main() {
-  SQLHelper.initializeNotification();
-  initializeDateFormatting().then((_) =>
-    runApp(const MyApp())
-  );
+  NotificationHelper.initializeNotification();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
