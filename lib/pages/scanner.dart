@@ -54,7 +54,7 @@ class _ScannerPageState extends State<ScannerPage> {
       productName: productName,
       expirationDate: expirationDate,
       notificationTime: DateTime.now(),
-      description: ""
+      type: "QrCode"
     );
     addReminder(reminder);
 

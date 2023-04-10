@@ -34,7 +34,7 @@ class _ManualPageState extends State<ManualPage> {
       productName: productNameController.text,
       expirationDate: selectedExpirationDate!,
       notificationTime: selectedNotificationTime!,
-      description: ""
+      type: "Manual",
     );
     addReminder(reminder);
 
@@ -59,7 +59,7 @@ class _ManualPageState extends State<ManualPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: const Text(""),
         elevation: 0,
         backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(
@@ -72,7 +72,7 @@ class _ManualPageState extends State<ManualPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
                       TextField(
@@ -115,7 +115,7 @@ class _ManualPageState extends State<ManualPage> {
                             onPressed: onConfirm,
                             child: Text(
                               "Add",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w900),
                             ),

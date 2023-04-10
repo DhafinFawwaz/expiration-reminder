@@ -3,7 +3,7 @@ class Reminder {
   final String productName;
   final DateTime expirationDate;
   final DateTime notificationTime;
-  final String description;
+  final String type; //Manual | QrCode
 
 
   Reminder({
@@ -11,7 +11,7 @@ class Reminder {
     required this.productName,
     required this.expirationDate,
     required this.notificationTime,
-    required this.description,
+    required this.type,
   });
 
   Map<String, dynamic> toJson() => {
@@ -19,7 +19,7 @@ class Reminder {
     'productName': productName,
     'expirationDate': expirationDate.toString(),
     'notificationTime': notificationTime.toString(),
-    'description': description,
+    'type': type,
   };
 
   static Reminder fromJson(Map<String,dynamic> json) => Reminder(
@@ -27,6 +27,6 @@ class Reminder {
     productName: json['productName'],
     notificationTime: DateTime.parse(json['notificationTime']),
     expirationDate: DateTime.parse(json['expirationDate']),
-    description: json['description'],
+    type: json['type'],
   );
 }

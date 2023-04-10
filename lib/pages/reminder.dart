@@ -32,18 +32,43 @@ class _ReminderPageState extends State<ReminderPage> {
       productName: widget.reminder.productName,
       expirationDate: selectedExpirationDate!,
       notificationTime: selectedNotificationTime!,
-      description: widget.reminder.description
+      type: widget.reminder.type,
     );
     SQLHelper.updateReminder(widget.reminder.id, reminder);
     Navigator.pop(context);
   }
 
+  Widget getDescription() => Align(
+                    alignment: Alignment.topLeft,
+                    child: FutureBuilder(
+                      future: SQLHelper.getDescription(widget.reminder),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                snapshot.data!,
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Text("");
+                        } else if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Text("");
+                        }
+
+                        // By default, show a loading spinner.
+                        return const CircularProgressIndicator();
+                      },
+                    ),
+                  );
+
 
 
   @override
   Widget build(BuildContext context) {
-  String description = widget.reminder.description;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -70,22 +95,9 @@ class _ReminderPageState extends State<ReminderPage> {
                     ),
                   ),
     
-                  (description == "") ? 
-                    const SizedBox(height: 0)
-                  :
-                    const SizedBox(height: 10)
-                  ,
-    
-                  Text(
-                    description,
-                    textAlign: TextAlign.justify,
-                  ),
-    
-                  (description == "") ? 
-                    const SizedBox(height: 0)
-                  :
-                    const SizedBox(height: 20)
-                  ,
+                  
+                  getDescription(),
+                  const SizedBox(height: 20),
     
     
         
@@ -136,13 +148,7 @@ class _ReminderPageState extends State<ReminderPage> {
 
 
                   const SizedBox(height: 15),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      SQLHelper.getDescription(),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
+                  // getDescription(),
 
 
 
