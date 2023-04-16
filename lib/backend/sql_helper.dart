@@ -10,7 +10,8 @@ import '../model/reminder_model.dart';
 import 'package:http/http.dart' as http;
 
 class SQLHelper{
-  static const String URI = "192.168.38.109:4000";
+  // static const String URI = "expiration-reminder-backend.vercel.app";
+  static const String URI = "192.168.38.109:3000";
   static const String databaseFile = "expiration.db";
   static const String reminderTable = "reminder";
   static const String descriptionTable = "description";
@@ -97,6 +98,8 @@ class SQLHelper{
 
   static Future<String> getDescription(Reminder reminder) async {
     final productName = reminder.productName;
+
+    // Check if reminder is added manually
     // if (reminder.type == "Manual") {
     //   debugPrint("Manual added reminder");
     //   return "";
@@ -151,6 +154,13 @@ class SQLHelper{
       "productName": productName,
       "description": description
     };
+    
+    // If the api returns an empty string, don't save the description
+    if (description == "") {
+      debugPrint("Description is empty");
+      return "";
+    }
+
     final id = await db.insert(
       descriptionTable,
       data,
