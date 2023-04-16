@@ -32,6 +32,7 @@ class _ManualPageState extends State<ManualPage> {
     Reminder reminder = Reminder(
       id: 0,
       productName: productNameController.text,
+      productAlias: productNameController.text,
       expirationDate: selectedExpirationDate!,
       notificationTime: selectedNotificationTime!,
       type: "Manual",

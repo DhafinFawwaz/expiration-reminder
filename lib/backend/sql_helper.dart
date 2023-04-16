@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 
 class SQLHelper{
   // static const String URI = "expiration-reminder-backend.vercel.app";
-  static const String URI = "192.168.38.109:3000";
+  static const String URI = "expiration-reminder-backend.vercel.app";
   static const String databaseFile = "expiration.db";
   static const String reminderTable = "reminder";
   static const String descriptionTable = "description";
@@ -20,6 +20,7 @@ class SQLHelper{
     await database.execute("""CREATE TABLE $reminderTable(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       productName TEXT,
+      productAlias TEXT,
       expirationDate TEXT,
       notificationTime TEXT,
       type TEXT
@@ -97,7 +98,7 @@ class SQLHelper{
   }
 
   static Future<String> getDescription(Reminder reminder) async {
-    final productName = reminder.productName;
+    final productName = reminder.productAlias;
 
     // Check if reminder is added manually
     // if (reminder.type == "Manual") {

@@ -30,6 +30,7 @@ class _ReminderPageState extends State<ReminderPage> {
     Reminder reminder = Reminder(
       id: widget.reminder.id,
       productName: widget.reminder.productName,
+      productAlias: widget.reminder.productAlias,
       expirationDate: selectedExpirationDate!,
       notificationTime: selectedNotificationTime!,
       type: widget.reminder.type,

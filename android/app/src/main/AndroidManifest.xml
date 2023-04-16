@@ -3,7 +3,7 @@
    <application
         android:label="Expiration Reminder"
         android:name="${applicationName}"
-        android:icon="assets/images/App Icon">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

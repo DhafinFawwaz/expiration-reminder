@@ -47,11 +47,12 @@ class _ScannerPageState extends State<ScannerPage> {
     });
     final List<String> splited = scannedCode.split(";");
     String productName = splited[0];
-    String productGeneralName = splited[1];
+    String productAlias = splited[1];
     DateTime expirationDate = DateTime.parse(splited[2]);
     Reminder reminder = Reminder(
       id: 0,
       productName: productName,
+      productAlias: productAlias,
       expirationDate: expirationDate,
       notificationTime: DateTime.now(),
       type: "QrCode"
