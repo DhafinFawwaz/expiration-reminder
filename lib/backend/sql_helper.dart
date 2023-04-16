@@ -132,7 +132,7 @@ class SQLHelper{
     // If description doesn't exist locally, Get description from API
     debugPrint("Getting description from API...");
     final queryParameters = {
-      'productName': productName,
+      'productName': productName.toLowerCase(),
     };
     final uri = Uri.http(URI, '/api', queryParameters);
     final headers = {
