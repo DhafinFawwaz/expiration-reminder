@@ -7,5 +7,10 @@ class ReminderHelper {
   static Future refreshReminders() async {
     final data = await SQLHelper.getReminders();
     reminders = data.map((reminder) => Reminder.fromJson(reminder)).toList();
+    sortByDate();
+  }
+
+  static void sortByDate() {
+    reminders.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
   }
 }
