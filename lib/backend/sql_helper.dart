@@ -47,7 +47,14 @@ class SQLHelper{
       conflictAlgorithm: sql.ConflictAlgorithm.replace
     );
     print("Reminder created");
-    NotificationHelper.scheduleNotification(reminder);
+    Reminder newReminder = Reminder(id: id, 
+      productName: reminder.productName, 
+      productAlias: reminder.productAlias, 
+      expirationDate: reminder.expirationDate, 
+      notificationTime: reminder.notificationTime, 
+      type: reminder.type
+    );
+    NotificationHelper.scheduleNotification(newReminder);
     return id;
   }
 
@@ -65,11 +72,11 @@ class SQLHelper{
     return result;
   }
 
-  static Future<void> deleteReminder(int id) async {
+  static Future<void> deleteReminder(Reminder reminder) async {
     final db = await SQLHelper.db();
     try {
-      await db.delete(reminderTable, where: "id = ?", whereArgs: [id]);
-      NotificationHelper.deleteNotification(id);
+      await db.delete(reminderTable, where: "id = ?", whereArgs: [reminder.id]);
+      NotificationHelper.deleteNotification(reminder);
     } catch (err) {
       debugPrint("Error when deleting an item: $err");
     }

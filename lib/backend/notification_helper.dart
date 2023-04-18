@@ -35,8 +35,8 @@ class NotificationHelper{
     }
   }
 
-  static Future<void> deleteNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+  static Future<void> deleteNotification(Reminder reminder) async {
+    await flutterLocalNotificationsPlugin.cancel(reminder.id);
   }
 
   static Future<void> scheduleNotification(Reminder reminder) async {
@@ -63,8 +63,30 @@ class NotificationHelper{
     debugPrint("nowTZDateTime:             $nowTZDateTime");
 
     if(notificationTZDateTime.subtract(const Duration(days: hmin)).isBefore(nowTZDateTime)) {
+      deleteNotification(reminder);
+      
+      // Check if the reminder hasn't expired today
+      if(notificationTZDateTime.isAfter(nowTZDateTime)) {
+        print("Creating reminder only for today");
+        print("reminder.id: ${reminder.id}");
+        body = "${reminder.productName} will expire today";
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+          -reminder.id,
+          appName,
+          body,
+          notificationTZDateTime,
+          const NotificationDetails(
+              android: AndroidNotificationDetails(
+                  '0', '0',
+                  channelDescription: 'Reminder notification')),
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime
+        );
+        
+        return;
+      }
       print("------------- already expire -------------");
-      deleteNotification(reminder.id);
       return;
     }
 
@@ -74,11 +96,28 @@ class NotificationHelper{
     print(nowTZDateTime);
     notificationDateTime = notificationDateTime.subtract(const Duration(days: 1));
 
+    print("reminder.id: ${reminder.id}");
     await flutterLocalNotificationsPlugin.zonedSchedule(
       reminder.id,
       appName,
       body,
       notificationTZDateTime.subtract(const Duration(days: hmin)),
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+              '0', '0',
+              channelDescription: 'Reminder notification')),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime
+    );
+
+    // Create reminder for today
+    body = "${reminder.productName} will expire today";
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      -reminder.id,
+      appName,
+      body,
+      notificationTZDateTime,
       const NotificationDetails(
           android: AndroidNotificationDetails(
               '0', '0',

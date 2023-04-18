@@ -6,6 +6,7 @@ class ReminderHelper {
   
   static Future refreshReminders() async {
     final data = await SQLHelper.getReminders();
+    print(data);
     reminders = data.map((reminder) => Reminder.fromJson(reminder)).toList();
     sortByDate();
   }

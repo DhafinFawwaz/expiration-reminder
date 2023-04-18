@@ -78,7 +78,7 @@ Widget getSubtitle(Reminder reminder)
             child: FloatingActionButton( // Delete button
               heroTag: null,
               onPressed: () async {
-                await SQLHelper.deleteReminder(reminder.id);
+                await SQLHelper.deleteReminder(reminder);
                 refreshPages();
               },
               elevation: 0,
