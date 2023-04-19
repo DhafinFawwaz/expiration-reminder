@@ -12,11 +12,11 @@ class FloatingBackButton extends StatelessWidget {
       onPressed: (){
         Navigator.pop(context, true);
       },
-      child: const Icon(Icons.arrow_back_ios_new),
       elevation: 0,
       highlightElevation: 0,
       backgroundColor: Colors.transparent,
       foregroundColor: foregroundColor,
+      child: const Icon(Icons.arrow_back_ios_new),
     );
   }
 }

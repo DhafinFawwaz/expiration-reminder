@@ -46,7 +46,7 @@ class SQLHelper{
       data,
       conflictAlgorithm: sql.ConflictAlgorithm.replace
     );
-    print("Reminder created");
+    debugPrint("Reminder created");
     Reminder newReminder = Reminder(id: id, 
       productName: reminder.productName, 
       productAlias: reminder.productAlias, 
@@ -86,7 +86,7 @@ class SQLHelper{
   // ------------ Description ------------
 
   static Future<sql.Database> initDescriptionTable() async {
-    print("Initializing description table...");
+    debugPrint("Initializing description table...");
     return sql.openDatabase(
       databaseFile,
       version: 1,
@@ -96,7 +96,7 @@ class SQLHelper{
     );
   }
   static Future<void> createDescriptionTables(sql.Database database) async {
-    print("Creating description table...");
+    debugPrint("Creating description table...");
     await database.execute("""CREATE TABLE ${descriptionTable}(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       productName TEXT,
@@ -169,7 +169,7 @@ class SQLHelper{
       return "";
     }
 
-    final id = await db.insert(
+    await db.insert(
       descriptionTable,
       data,
       conflictAlgorithm: sql.ConflictAlgorithm.replace

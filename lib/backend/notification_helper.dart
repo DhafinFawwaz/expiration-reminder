@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sqflite/sqflite.dart' as sql;
 import '../model/reminder_model.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -31,12 +30,13 @@ class NotificationHelper{
   static void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
     final String? payload = notificationResponse.payload;
     if (notificationResponse.payload != null) {
-      print("test");
+      debugPrint("test");
     }
   }
 
   static Future<void> deleteNotification(Reminder reminder) async {
     await flutterLocalNotificationsPlugin.cancel(reminder.id);
+    await flutterLocalNotificationsPlugin.cancel(-reminder.id);
   }
 
   static Future<void> scheduleNotification(Reminder reminder) async {
@@ -67,8 +67,8 @@ class NotificationHelper{
       
       // Check if the reminder hasn't expired today
       if(notificationTZDateTime.isAfter(nowTZDateTime)) {
-        print("Creating reminder only for today");
-        print("reminder.id: ${reminder.id}");
+        debugPrint("Creating reminder only for today");
+        debugPrint("reminder.id: ${reminder.id}");
         body = "${reminder.productName} will expire today";
         await flutterLocalNotificationsPlugin.zonedSchedule(
           -reminder.id,
@@ -86,7 +86,7 @@ class NotificationHelper{
         
         return;
       }
-      print("------------- already expire -------------");
+      debugPrint("------------- already expire -------------");
       return;
     }
 
@@ -96,7 +96,7 @@ class NotificationHelper{
     print(nowTZDateTime);
     notificationDateTime = notificationDateTime.subtract(const Duration(days: 1));
 
-    print("reminder.id: ${reminder.id}");
+    debugPrint("reminder.id: ${reminder.id}");
     await flutterLocalNotificationsPlugin.zonedSchedule(
       reminder.id,
       appName,
@@ -127,7 +127,7 @@ class NotificationHelper{
           UILocalNotificationDateInterpretation.absoluteTime
     );
 
-    print("------------- notification successfull -------------");
+    debugPrint("------------- notification successfull -------------");
 
   }
 

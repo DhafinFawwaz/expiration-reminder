@@ -15,7 +15,7 @@ class ListViewPage extends StatefulWidget {
 class ListViewPageState extends State<ListViewPage> {
 
   void refresh() {
-    print("refresh list");
+    debugPrint("refresh list");
     setState(() {});
   }
 

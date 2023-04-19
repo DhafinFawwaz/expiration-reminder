@@ -11,7 +11,7 @@ Widget getSubtitle(Reminder reminder)
     if(dayDifference < 0)
       return Text(
           "Expired! | Expired on ${DateFormat.yMMMMd('en_US').format(reminder.expirationDate)}",
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.red,
           ),
         );
@@ -25,7 +25,7 @@ Widget getSubtitle(Reminder reminder)
       String expirationDate = DateFormat.yMMMMd('en_US').format(reminder.expirationDate);
       return Text(
         "Expires today | Expired on ${expirationDate}",
-        style: TextStyle(
+        style: const TextStyle(
             color: Colors.blue
           ),
       );

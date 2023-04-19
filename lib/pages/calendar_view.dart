@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:expiration_reminder/backend/reminder_helper.dart';
 import 'package:expiration_reminder/widget/reminder_tile_widget.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +43,7 @@ class CalendarViewPageState extends State<CalendarViewPage> {
   }
 
   void refresh() {
-    print("refresh calendar");
+    debugPrint("refresh calendar");
     setState(() {
       _selectedEvents = _getEventsForDay(_selectedDay);
     });

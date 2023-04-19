@@ -1,9 +1,7 @@
-import 'package:expiration_reminder/backend/reminder_helper.dart';
 import 'package:flutter/material.dart';
 import '../model/reminder_model.dart';
 import 'package:date_field/date_field.dart';
 import '../util/global_theme.dart';
-import '../widget/back_widget.dart';
 import 'package:expiration_reminder/backend/sql_helper.dart';
 
 import '../widget/reminder_snackbar_widget.dart';
@@ -63,7 +61,7 @@ class _ManualPageState extends State<ManualPage> {
         title: const Text(""),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
       ),

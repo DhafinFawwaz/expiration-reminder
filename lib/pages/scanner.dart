@@ -2,11 +2,9 @@ import 'package:expiration_reminder/widget/reminder_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
-import '../backend/reminder_helper.dart';
 import '../backend/sql_helper.dart';
 import '../model/reminder_model.dart';
 import '../pages/manual.dart';
-import '../util/global_theme.dart';
 import '../widget/back_widget.dart';
 
 class ScannerPage extends StatefulWidget {
@@ -211,7 +209,7 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    print('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    debugPrint('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('no Permission')),

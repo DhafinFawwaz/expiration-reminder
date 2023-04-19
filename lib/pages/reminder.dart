@@ -72,10 +72,10 @@ class _ReminderPageState extends State<ReminderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: const Text(""),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
       ),
@@ -84,12 +84,12 @@ class _ReminderPageState extends State<ReminderPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(children: [
     
                   Text(
                     widget.reminder.productName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 30,
                       
@@ -132,7 +132,7 @@ class _ReminderPageState extends State<ReminderPage> {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: onConfirm,
-                      child: Text("Confirm",
+                      child: const Text("Confirm",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w900
@@ -142,7 +142,7 @@ class _ReminderPageState extends State<ReminderPage> {
                         shape: GlobalTheme.shape,
                         shadowColor: Colors.transparent,
                         elevation: 0.0,
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                       ).copyWith(elevation:ButtonStyleButton.allOrNull(0.0))
                     ),
                   ),

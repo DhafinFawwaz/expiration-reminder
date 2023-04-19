@@ -1,9 +1,6 @@
 import './calendar_view.dart';
-import '../widget/refresh_widget.dart';
 import 'package:flutter/material.dart';
 import '../backend/reminder_helper.dart';
-import '../backend/sql_helper.dart';
-import '../model/reminder_model.dart';
 import '../util/global_theme.dart';
 import './scanner.dart';
 import 'list_view.dart';
