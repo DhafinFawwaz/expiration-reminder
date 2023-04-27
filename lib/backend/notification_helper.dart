@@ -78,7 +78,10 @@ class NotificationHelper{
           const NotificationDetails(
               android: AndroidNotificationDetails(
                   '0', '0',
-                  channelDescription: 'Reminder notification')),
+                  channelDescription: 'Reminder notification',
+                  importance: Importance.max,
+                  priority: Priority.high,
+                  )),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime
@@ -105,7 +108,10 @@ class NotificationHelper{
       const NotificationDetails(
           android: AndroidNotificationDetails(
               '0', '0',
-              channelDescription: 'Reminder notification')),
+              channelDescription: 'Reminder notification',
+              importance: Importance.max,
+              priority: Priority.high,
+              )),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime
@@ -121,7 +127,10 @@ class NotificationHelper{
       const NotificationDetails(
           android: AndroidNotificationDetails(
               '0', '0',
-              channelDescription: 'Reminder notification')),
+              channelDescription: 'Reminder notification',
+              importance: Importance.max,
+              priority: Priority.high,
+              )),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime
@@ -131,13 +140,4 @@ class NotificationHelper{
 
   }
 
-
-  static void printAllPendingNotification() async {
-    final List<ActiveNotification>? activeNotifications =
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.getActiveNotifications();
-    print(activeNotifications);
-  }
 }
